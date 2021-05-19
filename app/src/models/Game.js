@@ -1,38 +1,43 @@
-module.exports = function (sequelize, DataTypes) {
-  return sequelize.define('game', {
-    title: {
-      type: DataTypes.STRING(25),
-      allowNull: false,
-    },
+const Sequelize = require('sequelize');
+const { sequelize } = require('../db');
 
-    owner_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
+const attributes = {
+  title: {
+    type: Sequelize.STRING(25),
+    allowNull: false,
+  },
 
-    studio: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
+  ownerId: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+  },
 
-    esrb_rating: {
-      type: DataTypes.CHAR(5),
-      allowNull: false,
-    },
+  studio: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
 
-    user_rating: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        min: 1,
-        max: 5,
-      },
-    },
+  esrbRating: {
+    type: Sequelize.CHAR(5),
+    allowNull: false,
+  },
 
-    have_played: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
-      allowNull: false,
+  userRating: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+    validate: {
+      min: 1,
+      max: 5,
     },
-  });
+  },
+
+  havePlayed: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false,
+    allowNull: false,
+  },
 };
+
+const Game = sequelize.define('Games', attributes);
+
+exports.Game = Game;

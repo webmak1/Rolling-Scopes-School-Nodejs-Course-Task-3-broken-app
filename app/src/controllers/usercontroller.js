@@ -1,3 +1,4 @@
+require('dotenv').config();
 const router = require('express').Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -7,15 +8,10 @@ const { User } = require('../models/User');
 
 // SIGNUP
 router.post('/signup', async (req, res) => {
-  // router.route('/signup').post((req, res) => {
   console.log('SIGNUP');
 
   const { fullName, userName, password, email } = req.body;
-  // console.log(fullName, userName, password, email);
-
   const passwordHash = await bcrypt.hashSync(password, 10);
-  // console.log('passwordHash');
-  // console.log(passwordHash);
 
   try {
     await User.sync({ force: true });
@@ -26,19 +22,13 @@ router.post('/signup', async (req, res) => {
       email,
     });
 
-    // console.log('createdUser1');
-    // console.log(createdUser);
-
     const token = await jwt.sign(
       { id: createdUser.id },
-      'lets_play_sum_games_man',
+      process.env.JWT_SECRET_KEY,
       {
         expiresIn: 60 * 60 * 24,
       }
     );
-
-    // console.log('createdUser2');
-    // console.log(createdUser);
 
     return res.status(200).json({
       user: createdUser,
@@ -51,28 +41,6 @@ router.post('/signup', async (req, res) => {
   }
 });
 
-//   User.create({
-//     fullName,
-//     userName,
-//     passwordHash: bcrypt.hashSync(password, 10),
-//     email: email,
-//   }).then(
-//     function signupSuccess(user) {
-//       let token = jwt.sign({ id: user.id }, 'lets_play_sum_games_man', {
-//         expiresIn: 60 * 60 * 24,
-//       });
-//       res.status(200).json({
-//         user: user,
-//         token: token,
-//       });
-//     },
-
-//     function signupFail(err) {
-//       res.status(500).send(err.message);
-//     }
-//   );
-// });
-
 router.post('/signin', (req, res) => {
   console.log('SIGNIN');
 
@@ -81,7 +49,7 @@ router.post('/signin', (req, res) => {
 
   User.findOne({ where: { userName: userName } }).then((user) => {
     if (user) {
-      bcrypt.compare(password, user.passwordHash, function (err, matches) {
+      bcrypt.compare(password, user.passwordHash, function (_err, matches) {
         if (matches) {
           const token = jwt.sign({ id: user.id }, 'lets_play_sum_games_man', {
             expiresIn: 60 * 60 * 24,
