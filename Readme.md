@@ -91,7 +91,7 @@ TypeError: require(...).import is not a function
 
 Не запускалось приложение на 4000 порту.
 
-Было:
+**Было:**
 
 ```js
 app.listen(function () {
@@ -101,7 +101,7 @@ app.listen(function () {
 
 <br/>
 
-Стало:
+**Стало:**
 
 ```js
 const APP_PORT = process.env.APP_APP_PORT || 4000;
@@ -177,6 +177,12 @@ havePlayed обрабатывает неправильно. д.б. boolean
 
 Используются id из обычных цифр.
 
+Возможно неправильно сделана модель.
+
+При SIGN IN возвращаетмся много лишнего. Нужно возвращать только токен.
+
+Можно добавлять повторяющиеся данные.
+
 <br/>
 
 ```
@@ -209,9 +215,11 @@ $ curl \
 
 ```
 ***
-"sessionToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjIxMzc4OTkxLCJleHAiOjE2MjE0NjUzOTF9.EXHGuiebq97etqCFXTh9wVBNvFcTpK-fpwIAd7OlC0w"
+"sessionToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRjNjViNmU4LTBjYzQtNDI0NS04MGM4LWMyY2YxYTM3Yjk0YyIsImlhdCI6MTYyMTQ4NDg0OSwiZXhwIjoxNjIxNTcxMjQ5fQ.j0F0DEZNv35rNfkagbOdmfbNjLVppGrs_X_IaWUZito"
 ***
 ```
+
+$ export TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRjNjViNmU4LTBjYzQtNDI0NS04MGM4LWMyY2YxYTM3Yjk0YyIsImlhdCI6MTYyMTQ4NDg0OSwiZXhwIjoxNjIxNTcxMjQ5fQ.j0F0DEZNv35rNfkagbOdmfbNjLVppGrs_X_IaWUZito
 
 <br/>
 
@@ -226,7 +234,7 @@ $ curl \
       "havePlayed":"True"
       }' \
     --header "Content-Type: application/json" \
-    --header "authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjIxMzc4OTkxLCJleHAiOjE2MjE0NjUzOTF9.EXHGuiebq97etqCFXTh9wVBNvFcTpK-fpwIAd7OlC0w" \
+    --header "authorization: ${TOKEN}" \
     --request POST http://localhost:4000/api/game/create \
     | python -m json.tool
 ```
@@ -244,7 +252,7 @@ $ curl \
       "havePlayed":"NO"
       }' \
     --header "Content-Type: application/json" \
-    --header "authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjIxMzc4OTkxLCJleHAiOjE2MjE0NjUzOTF9.EXHGuiebq97etqCFXTh9wVBNvFcTpK-fpwIAd7OlC0w" \
+    --header "authorization: ${TOKEN}" \
     --request POST http://localhost:4000/api/game/create \
     | python -m json.tool
 ```
@@ -262,7 +270,7 @@ $ curl \
       "havePlayed":"YES"
       }' \
     --header "Content-Type: application/json" \
-    --header "authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjIxMzc4OTkxLCJleHAiOjE2MjE0NjUzOTF9.EXHGuiebq97etqCFXTh9wVBNvFcTpK-fpwIAd7OlC0w" \
+    --header "authorization: ${TOKEN}" \
     --request POST http://localhost:4000/api/game/create \
     | python -m json.tool
 ```
@@ -273,30 +281,8 @@ $ curl \
 // GET ALL GAMES
 $ curl \
     --header "Content-Type: application/json" \
-    --header "authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjIxMzc4OTkxLCJleHAiOjE2MjE0NjUzOTF9.EXHGuiebq97etqCFXTh9wVBNvFcTpK-fpwIAd7OlC0w" \
+    --header "authorization: ${TOKEN}" \
     --request GET http://localhost:4000/api/game/all \
-    | python -m json.tool
-```
-
-<br/>
-
-```
-// DELETE GAME
-$ curl \
-    --header "Content-Type: application/json" \
-    --header "authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjIxMzc4OTkxLCJleHAiOjE2MjE0NjUzOTF9.EXHGuiebq97etqCFXTh9wVBNvFcTpK-fpwIAd7OlC0w" \
-    --request DELETE http://localhost:4000/api/game/remove/3 \
-    | python -m json.tool
-```
-
-<br/>
-
-```
-// GET BY ID
-$ curl \
-    --header "Content-Type: application/json" \
-    --header "authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjIxMzc4OTkxLCJleHAiOjE2MjE0NjUzOTF9.EXHGuiebq97etqCFXTh9wVBNvFcTpK-fpwIAd7OlC0w" \
-    --request GET http://localhost:4000/api/game/2 \
     | python -m json.tool
 ```
 
@@ -313,7 +299,29 @@ $ curl \
       "havePlayed":"NO"
       }' \
     --header "Content-Type: application/json" \
-    --header "authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjIxMzc4OTkxLCJleHAiOjE2MjE0NjUzOTF9.EXHGuiebq97etqCFXTh9wVBNvFcTpK-fpwIAd7OlC0w" \
-    --request PUT http://localhost:4000/api/game/update/2 \
+    --header "authorization: ${TOKEN}" \
+    --request PUT http://localhost:4000/api/game/update/63cd89e2-3d7c-470b-9146-3f5a9f0113ee \
+    | python -m json.tool
+```
+
+<br/>
+
+```
+// GET BY ID
+$ curl \
+    --header "Content-Type: application/json" \
+    --header "authorization: ${TOKEN}" \
+    --request GET http://localhost:4000/api/game/63cd89e2-3d7c-470b-9146-3f5a9f0113ee \
+    | python -m json.tool
+```
+
+<br/>
+
+```
+// DELETE GAME
+$ curl \
+    --header "Content-Type: application/json" \
+    --header "authorization: ${TOKEN}" \
+    --request DELETE http://localhost:4000/api/game/remove/8830a0da-f49e-441a-972a-af7ea1ad25b5 \
     | python -m json.tool
 ```

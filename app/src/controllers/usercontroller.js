@@ -3,7 +3,6 @@ const router = require('express').Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-// const User = require('../db');
 const { User } = require('../models/User');
 
 // SIGNUP
@@ -14,7 +13,8 @@ router.post('/signup', async (req, res) => {
   const passwordHash = await bcrypt.hashSync(password, 10);
 
   try {
-    await User.sync({ force: true });
+    // await User.sync({ force: true });
+    await User.sync();
     const createdUser = await User.create({
       fullName,
       userName,
@@ -22,22 +22,15 @@ router.post('/signup', async (req, res) => {
       email,
     });
 
-    const token = await jwt.sign(
-      { id: createdUser.id },
-      process.env.JWT_SECRET_KEY,
-      {
-        expiresIn: 60 * 60 * 24,
-      }
-    );
+    await jwt.sign({ id: createdUser.id }, process.env.JWT_SECRET_KEY, {
+      expiresIn: 60 * 60 * 24,
+    });
 
     return res.status(200).json({
-      user: createdUser,
-      token,
+      message: `User ${createdUser.userName} successfully created!`,
     });
   } catch (err) {
-    console.log('err');
-    console.log(err);
-    return res.status(500).send({ err: 'ERROR' });
+    return res.status(500).send({ err: err.message });
   }
 });
 
@@ -45,7 +38,6 @@ router.post('/signin', (req, res) => {
   console.log('SIGNIN');
 
   const { userName, password } = req.body;
-  console.log(userName, password);
 
   User.findOne({ where: { userName: userName } }).then((user) => {
     if (user) {
@@ -55,9 +47,7 @@ router.post('/signin', (req, res) => {
             expiresIn: 60 * 60 * 24,
           });
           return res.json({
-            user: user,
-            message: 'Successfully authenticated.',
-            sessionToken: token,
+            message: `Your token for authorization is: ${token}`,
           });
         } else {
           return res.status(502).send({ error: 'Passwords do not match.' });

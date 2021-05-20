@@ -1,38 +1,40 @@
-const Sequelize = require('sequelize');
+const DataTypes = require('sequelize');
 const { sequelize } = require('../db');
 
 const attributes = {
+  id: {
+    primaryKey: true,
+    allowNull: false,
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+  },
   title: {
-    type: Sequelize.STRING(25),
+    type: DataTypes.STRING(25),
     allowNull: false,
   },
-
   ownerId: {
-    type: Sequelize.INTEGER,
+    allowNull: false,
+    type: DataTypes.UUID,
     allowNull: false,
   },
-
   studio: {
-    type: Sequelize.STRING,
+    type: DataTypes.STRING,
     allowNull: false,
   },
-
   esrbRating: {
-    type: Sequelize.CHAR(5),
+    type: DataTypes.CHAR(5),
     allowNull: false,
   },
-
   userRating: {
-    type: Sequelize.INTEGER,
+    type: DataTypes.INTEGER,
     allowNull: false,
     validate: {
       min: 1,
       max: 5,
     },
   },
-
   havePlayed: {
-    type: Sequelize.BOOLEAN,
+    type: DataTypes.BOOLEAN,
     defaultValue: false,
     allowNull: false,
   },

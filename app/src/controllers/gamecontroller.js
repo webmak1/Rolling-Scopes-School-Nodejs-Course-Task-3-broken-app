@@ -7,6 +7,7 @@ router.get('/all', async (req, res) => {
 
   try {
     // await Game.sync({ force: true });
+    await Game.sync();
     const allGames = await Game.findAll({ where: { ownerId: userId } });
 
     if (!allGames) {
@@ -31,10 +32,9 @@ router.get('/:id', async (req, res) => {
   const { id: userId } = req.body.user;
   const { id: gameId } = req.params;
 
-  console.log(userId, gameId);
-
   try {
     // await Game.sync({ force: true });
+    await Game.sync();
     const game = await Game.findOne({
       where: { id: gameId, ownerId: userId },
     });
@@ -63,7 +63,7 @@ router.post('/create', async (req, res) => {
   const { id: userId } = req.body.user;
 
   try {
-    // await Game.sync({ force: true });
+    await Game.sync();
     const createdGame = await Game.create({
       title,
       ownerId: userId,
@@ -74,8 +74,7 @@ router.post('/create', async (req, res) => {
     });
 
     return res.status(200).json({
-      game: createdGame,
-      message: 'Game created.',
+      message: `Game with id ${createdGame.title} successfully created!`,
     });
   } catch (err) {
     return res.status(500).json({
@@ -94,6 +93,7 @@ router.put('/update/:id', async (req, res) => {
 
   try {
     // await Game.sync({ force: true });
+    await Game.sync();
     const updatedGame = await Game.update(
       {
         title,
@@ -110,14 +110,10 @@ router.put('/update/:id', async (req, res) => {
       }
     );
 
-    console.log(updatedGame);
-
     return res.status(200).json({
-      game: updatedGame,
-      message: 'Successfully updated.',
+      message: `Game with id ${updatedGame} successfully deleted!`,
     });
   } catch (err) {
-    console.log(err);
     return res.status(500).json({
       message: err.message,
     });
@@ -133,7 +129,8 @@ router.delete('/remove/:id', async (req, res) => {
 
   try {
     // await Game.sync({ force: true });
-    const deletedGame = await Game.destroy({
+    await Game.sync();
+    await Game.destroy({
       where: {
         id: gameId,
         ownerId: userId,
@@ -141,8 +138,7 @@ router.delete('/remove/:id', async (req, res) => {
     });
 
     return res.status(200).json({
-      game: deletedGame,
-      message: 'Successfully deleted',
+      message: `Game with id ${gameId} successfully deleted!`,
     });
   } catch (err) {
     return res.status(500).json({

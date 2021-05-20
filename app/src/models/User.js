@@ -1,25 +1,29 @@
-const Sequelize = require('sequelize');
+const DataTypes = require('sequelize');
 const { sequelize } = require('../db');
 
 const attributes = {
+  id: {
+    primaryKey: true,
+    allowNull: false,
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+  },
   fullName: {
-    type: Sequelize.STRING,
+    type: DataTypes.STRING,
     allowNull: false,
   },
-
   userName: {
-    type: Sequelize.STRING,
+    type: DataTypes.STRING,
     allowNull: false,
   },
-
   passwordHash: {
-    type: Sequelize.STRING,
+    type: DataTypes.STRING,
     allowNull: false,
   },
-
   email: {
-    type: Sequelize.STRING,
+    type: DataTypes.STRING,
     allowNull: false,
+    primaryKey: true,
     validate: {
       isEmail: true,
     },
