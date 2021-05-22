@@ -14,13 +14,17 @@
 
 Переименовать файл: .env.sample в .env. В .env.sample копия работающего конфига.
 
-Инсталлировать пакеты
+Инсталлировать пакеты и запустить приложение:
 
     $ npm install
+    $ npm start
 
 <br/>
 
-Инсталлировать <a href="//sysadm.ru/devops/containers/docker/setup/">docker и docker-compose</a>
+Для работы с базой, можно
+инсталлировать <a href="//sysadm.ru/devops/containers/docker/setup/">docker и docker-compose</a>
+
+<br/>
 
 Для запуска базы, выполнить.
 
@@ -43,6 +47,16 @@ $ curl \
 
 <br/>
 
+**response:**
+
+```
+{
+    "message": "User marley successfully created!"
+}
+```
+
+<br/>
+
 ```
 // SIGN IN
 $ curl \
@@ -56,17 +70,19 @@ $ curl \
 
 <br/>
 
-**returns**
+**response**
 
 ```
-***
-"sessionToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRjNjViNmU4LTBjYzQtNDI0NS04MGM4LWMyY2YxYTM3Yjk0YyIsImlhdCI6MTYyMTQ4NDg0OSwiZXhwIjoxNjIxNTcxMjQ5fQ.j0F0DEZNv35rNfkagbOdmfbNjLVppGrs_X_IaWUZito"
-***
+{
+    "message": "Your token for authorization is: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM3NjFmNGMwLWZlMjAtNDA3NC05NjA0LTQ4ZjI4NzEyYmZhYiIsImlhdCI6MTYyMTY5MjQ0NiwiZXhwIjoxNjIxNzc4ODQ2fQ.iRr8XrQHRGlhIVG19ANfMGhT4AJTCrMetUWRRS0_8xc"
+}
 ```
 
 <br/>
 
-$ export TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRjNjViNmU4LTBjYzQtNDI0NS04MGM4LWMyY2YxYTM3Yjk0YyIsImlhdCI6MTYyMTQ4NDg0OSwiZXhwIjoxNjIxNTcxMjQ5fQ.j0F0DEZNv35rNfkagbOdmfbNjLVppGrs_X_IaWUZito
+```
+$ export TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM3NjFmNGMwLWZlMjAtNDA3NC05NjA0LTQ4ZjI4NzEyYmZhYiIsImlhdCI6MTYyMTY5MjQ0NiwiZXhwIjoxNjIxNzc4ODQ2fQ.iRr8XrQHRGlhIVG19ANfMGhT4AJTCrMetUWRRS0_8xc
+```
 
 <br/>
 
@@ -78,12 +94,22 @@ $ curl \
       "studio":"Blizzard",
       "esrbRating":"8",
       "userRating":"5",
-      "havePlayed":"True"
+      "havePlayed":"Yes"
       }' \
     --header "Content-Type: application/json" \
     --header "authorization: ${TOKEN}" \
     --request POST http://localhost:4000/api/game/create \
     | python -m json.tool
+```
+
+<br/>
+
+**response**
+
+```
+{
+    "message": "Game with title Starcraft 2 successfully created!"
+}
 ```
 
 <br/>
@@ -96,7 +122,7 @@ $ curl \
       "studio":"ID Software",
       "esrbRating":"5",
       "userRating":"4",
-      "havePlayed":"NO"
+      "havePlayed":"No"
       }' \
     --header "Content-Type: application/json" \
     --header "authorization: ${TOKEN}" \
@@ -114,7 +140,7 @@ $ curl \
       "studio":"Visceral Games",
       "esrbRating":"3",
       "userRating":"3",
-      "havePlayed":"YES"
+      "havePlayed":"No"
       }' \
     --header "Content-Type: application/json" \
     --header "authorization: ${TOKEN}" \
@@ -135,6 +161,51 @@ $ curl \
 
 <br/>
 
+**response**
+
+```
+{
+    "games": [
+        {
+            "createdAt": "2021-05-22T14:08:01.935Z",
+            "esrbRating": "8    ",
+            "havePlayed": true,
+            "id": "a71b3274-dcaa-4568-8a78-a12e08bb4ef5",
+            "ownerId": "3761f4c0-fe20-4074-9604-48f28712bfab",
+            "studio": "Blizzard",
+            "title": "Starcraft 2",
+            "updatedAt": "2021-05-22T14:08:01.935Z",
+            "userRating": 5
+        },
+        {
+            "createdAt": "2021-05-22T14:09:38.782Z",
+            "esrbRating": "5    ",
+            "havePlayed": false,
+            "id": "fa48daa9-afde-40f7-8d78-5eb383e03c1e",
+            "ownerId": "3761f4c0-fe20-4074-9604-48f28712bfab",
+            "studio": "ID Software",
+            "title": "Quake 2",
+            "updatedAt": "2021-05-22T14:09:38.782Z",
+            "userRating": 4
+        },
+        {
+            "createdAt": "2021-05-22T14:09:47.007Z",
+            "esrbRating": "3    ",
+            "havePlayed": false,
+            "id": "dd85917a-e093-430f-8f96-02d080132917",
+            "ownerId": "3761f4c0-fe20-4074-9604-48f28712bfab",
+            "studio": "Visceral Games",
+            "title": "Dead Space 3",
+            "updatedAt": "2021-05-22T14:09:47.007Z",
+            "userRating": 3
+        }
+    ],
+    "message": "Data fetched."
+}
+```
+
+<br/>
+
 ```
 // UPDATE
 $ curl \
@@ -143,12 +214,22 @@ $ curl \
       "studio":"Blizzard",
       "esrbRating":"2",
       "userRating":"2",
-      "havePlayed":"NO"
+      "havePlayed":"Yes"
       }' \
     --header "Content-Type: application/json" \
     --header "authorization: ${TOKEN}" \
-    --request PUT http://localhost:4000/api/game/update/63cd89e2-3d7c-470b-9146-3f5a9f0113ee \
+    --request PUT http://localhost:4000/api/game/update/a71b3274-dcaa-4568-8a78-a12e08bb4ef5 \
     | python -m json.tool
+```
+
+<br/>
+
+**response**
+
+```
+{
+    "message": "Game with id 1 successfully updated!"
+}
 ```
 
 <br/>
@@ -158,8 +239,28 @@ $ curl \
 $ curl \
     --header "Content-Type: application/json" \
     --header "authorization: ${TOKEN}" \
-    --request GET http://localhost:4000/api/game/63cd89e2-3d7c-470b-9146-3f5a9f0113ee \
+    --request GET http://localhost:4000/api/game/fa48daa9-afde-40f7-8d78-5eb383e03c1e \
     | python -m json.tool
+```
+
+<br/>
+
+**response**
+
+```
+{
+    "game": {
+        "createdAt": "2021-05-22T14:09:38.782Z",
+        "esrbRating": "5    ",
+        "havePlayed": false,
+        "id": "fa48daa9-afde-40f7-8d78-5eb383e03c1e",
+        "ownerId": "3761f4c0-fe20-4074-9604-48f28712bfab",
+        "studio": "ID Software",
+        "title": "Quake 2",
+        "updatedAt": "2021-05-22T14:09:38.782Z",
+        "userRating": 4
+    }
+}
 ```
 
 <br/>
@@ -169,12 +270,67 @@ $ curl \
 $ curl \
     --header "Content-Type: application/json" \
     --header "authorization: ${TOKEN}" \
-    --request DELETE http://localhost:4000/api/game/remove/8830a0da-f49e-441a-972a-af7ea1ad25b5 \
+    --request DELETE http://localhost:4000/api/game/remove/dd85917a-e093-430f-8f96-02d080132917 \
     | python -m json.tool
 ```
 
 <br/>
 
+**response**
+
+```
+{
+    "message": "Game with id dd85917a-e093-430f-8f96-02d080132917 successfully deleted!"
+}
+```
+
+<br/>
+
+```
+// GET ALL GAMES
+$ curl \
+    --header "Content-Type: application/json" \
+    --header "authorization: ${TOKEN}" \
+    --request GET http://localhost:4000/api/game/all \
+    | python -m json.tool
+```
+
+<br/>
+
+**response**
+
+```
+{
+    "games": [
+        {
+            "createdAt": "2021-05-22T14:09:38.782Z",
+            "esrbRating": "5    ",
+            "havePlayed": false,
+            "id": "fa48daa9-afde-40f7-8d78-5eb383e03c1e",
+            "ownerId": "3761f4c0-fe20-4074-9604-48f28712bfab",
+            "studio": "ID Software",
+            "title": "Quake 2",
+            "updatedAt": "2021-05-22T14:09:38.782Z",
+            "userRating": 4
+        },
+        {
+            "createdAt": "2021-05-22T14:08:01.935Z",
+            "esrbRating": "2    ",
+            "havePlayed": true,
+            "id": "a71b3274-dcaa-4568-8a78-a12e08bb4ef5",
+            "ownerId": "3761f4c0-fe20-4074-9604-48f28712bfab",
+            "studio": "Blizzard",
+            "title": "Diablo 3",
+            "updatedAt": "2021-05-22T14:11:55.431Z",
+            "userRating": 2
+        }
+    ],
+    "message": "Data fetched."
+}
+
+```
+
+<br/>
 <br/>
 
 ## Cамопроверка:
@@ -182,8 +338,6 @@ $ curl \
 <br/>
 
 ### Найденные ошибки компиляции
-
-<описание ошибки>. <описание исправления>. Исправлена(ы) строка(и) <номер(а) строк> в файле <относительный путь к файлу из корневой папки> ...
 
 <br/>
 
@@ -207,23 +361,28 @@ ReferenceError: routers is not defined
 
 **Исправление ошибки 1:**
 
+```
 Ошибка в имени переменной.
 
 файл: controllers/gamecontroller.js
 Строка: 116
 
 Исправление: Переименование константы в router.
+```
 
 <br/>
 
 **Ошибка 2:**
 
+```
 Error: Cannot find module 'bcrypt'
+```
 
 <br/>
 
 **Исправление ошибки 2:**
 
+```
 Не указан в package.json модуль bcrypt.
 
 файл: package.json
@@ -231,6 +390,7 @@ Error: Cannot find module 'bcrypt'
 Исправление:
 
     $ npm install bcrypt
+```
 
 <br/>
 
@@ -247,6 +407,7 @@ TypeError: require(...).import is not a function
 
 **Исправление ошибки 3:**
 
+```
 Ошибка в импорте модели user.
 
 файл: controllers/usercontroller.js
@@ -255,6 +416,7 @@ TypeError: require(...).import is not a function
 Исправление: Использовать следующий синтаксис.
 
     const { User } = require('../models/User');
+```
 
 <br/>
 
@@ -272,12 +434,16 @@ SyntaxError: Function statements require a function name
 
 **Исправление ошибки 4:**
 
+```
 Ошибка в том, что не экспортируется функция и у функции отсутствует имя.
 
 файл: models/game.js
 Строка: 1
 
 Исправление: Использовать следующий синтаксис для экспорта. Присвоение имени объекту с данными.
+```
+
+<br/>
 
 ```js
 const Game = sequelize.define('Games', attributes);
@@ -296,12 +462,14 @@ TypeError: db.sync is not a function
 
 ```
 
+```
 Ошибка в неправильном (возможно устаревшем) вызове функции.
 
 файл: app.js
 Строка: 8
 
 Исправление: удаление функции. Использование синтаксиса следующего вида, при необходимости работы с базой.
+```
 
 <br/>
 
@@ -314,8 +482,6 @@ await Game.sync();
 
 ### Найденные ошибки логики приложения
 
-<описание ошибки>. <описание исправления>. Исправлена(ы) строка(и) <номер(а) строк> в файле <относительный путь к файлу из корневой папки> ...
-
 <br/>
 
 **Ошибка 1:**
@@ -326,10 +492,12 @@ await Game.sync();
 
 **Исправление ошибки 1:**
 
+```
 Ошибка в том, что при запуске приложения нужный порт не назначался или не стартовал должным образом.
 
 файл: app.js
 Строки: 13-15
+```
 
 <br/>
 
@@ -381,10 +549,12 @@ app.listen(APP_PORT, () =>
 
 **Исправление ошибки 3:**
 
+```
 файл: db.js
 Строка: конец файла - строка 17-18
 
 Исправление: Реализовать экспорт.
+```
 
 <br/>
 
@@ -402,16 +572,24 @@ module.exports = sequelize;
 
 Описание:
 
+```
 Пока не удалил из app.js, не проходили запросы.
+```
+
+<br/>
 
 ```
 app.use(require('body-parser'));
 ```
 
+<br/>
+
+```
 файл: app.js
 Строка: 9
 
 Исправление: Удаление строки из приложения.
+```
 
 <br/>
 
@@ -421,83 +599,96 @@ app.use(require('body-parser'));
 
 **Исправление ошибки 4:**
 
-Описание:
+```
+Описание: Разный регистр в слове passwordHash. При работе, значение переданное программе терялось.
 
-Разный регистр в слове passwordHash. При работе, значение переданное программе терялось.
-
-файл: controllers/usercontroller.js  
+файл: controllers/usercontroller.js
 Строка: 11
 
-файл: controllers/usercontroller.js  
+файл: controllers/usercontroller.js
 Строка: 32
 
 Исправление: Использовать одно название в каждом из перечисленных случаев - passwordHash.
+```
 
 <br/>
 
 **Ошибка 6:**
 
+```
 Описание:
 
 При SIGN IN возвращались лишине данные, в том числе и passwordHash
 
-файл: controllers/usercontroller.js  
+файл: controllers/usercontroller.js
 Строка: 36
 
 Исправление: убрать из возвращаемых данных созданного пользователя.
 
 ```
+
+<br/>
+
+```
 user: user,
 ```
 
+```
 Оставить только token.
+```
 
 <br/>
 
 **Ошибка 7:**
 
+```
 Описание:
 
 В коде повторяется строковая переменная со значение 'lets_play_sum_games_man' для JWT токена.
 
-файл: middleware/validate-session.js  
+файл: middleware/validate-session.js
 Строка: 12
 
-файл: controllers/usercontroller.js  
+файл: controllers/usercontroller.js
 Строка: 34
 
 Исправление: Вынес строковую переменную в JWT_SECRET_KEY в файл .env.
+```
 
 <br/>
 
 **Ошибка 8:**
 
+```
 Описание:
 
 В моделях отсутвовали constraints, в том числе PK.
 
-файл: models/game.js  
+файл: models/game.js
 Строка:
 
-файл: models/user.js  
+файл: models/user.js
 Строка:
 
 Исправление: Добавил constraints на некоторые поля.
+```
 
 <br/>
 
 **Ошибка 9:**
 
+```
 Описание:
 
 Неправильные ответы от сервера. д.б. 404. передается 500. Посторяется в нескольких файлах.
 
 файл: controllers/gamecontroller.js
 Строка: 15
+```
 
 <br/>
 
-Было:
+**Было:**
 
 <br/>
 
@@ -519,6 +710,7 @@ return res.status(404).json({
 
 **Ошибка 10:**
 
+```
 Описание:
 
 Использовались id из обычных цифр. Не является хорошей практикой. Является логической ошибкой, т.к. пользователи могу удидеть закономерности и абузить их.
@@ -530,6 +722,7 @@ return res.status(404).json({
 Строки: -
 
 Исправления: Использовать.
+```
 
 <br/>
 
@@ -561,17 +754,11 @@ return res.status(404).json({
 
 **Ошибка 11:**
 
-Передаваемый параметр havePlayed обрабатывает неправильно. д.б. boolean
-
-Не исправлялось.
-
-<br/>
-
-**Ошибка 12:**
-
+```
 Нет проверок передаваемых параметров в приложение.
 
 Не исправлялось.
+```
 
 <br/>
 

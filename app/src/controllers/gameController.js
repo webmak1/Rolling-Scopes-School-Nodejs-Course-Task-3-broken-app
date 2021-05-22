@@ -74,7 +74,7 @@ router.post('/create', async (req, res) => {
     });
 
     return res.status(200).json({
-      message: `Game with id ${createdGame.title} successfully created!`,
+      message: `Game with title ${createdGame.title} successfully created!`,
     });
   } catch (err) {
     return res.status(500).json({
@@ -111,7 +111,7 @@ router.put('/update/:id', async (req, res) => {
     );
 
     return res.status(200).json({
-      message: `Game with id ${updatedGame} successfully deleted!`,
+      message: `Game with id ${updatedGame} successfully updated!`,
     });
   } catch (err) {
     return res.status(500).json({
