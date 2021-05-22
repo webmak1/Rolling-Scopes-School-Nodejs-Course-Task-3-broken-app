@@ -54,6 +54,8 @@ $ curl \
     | python -m json.tool
 ```
 
+<br/>
+
 **returns**
 
 ```
@@ -203,9 +205,30 @@ ReferenceError: routers is not defined
 
 <br/>
 
+**Исправление ошибки 1:**
+
+Ошибка в имени переменной.
+
+файл: controllers/gamecontroller.js
+Строка: 116
+
+Исправление: Переименование константы в router.
+
+<br/>
+
 **Ошибка 2:**
 
 Error: Cannot find module 'bcrypt'
+
+<br/>
+
+**Исправление ошибки 2:**
+
+Не указан в package.json модуль bcrypt.
+
+файл: package.json
+
+Исправление:
 
     $ npm install bcrypt
 
@@ -222,6 +245,19 @@ TypeError: require(...).import is not a function
 
 <br/>
 
+**Исправление ошибки 3:**
+
+Ошибка в импорте модели user.
+
+файл: controllers/usercontroller.js
+Строка: 5
+
+Исправление: Использовать следующий синтаксис.
+
+    const { User } = require('../models/User');
+
+<br/>
+
 **Ошибка 4:**
 
 ```
@@ -230,6 +266,22 @@ function(sequelize, DataTypes) {
 ^^^^^^^^
 
 SyntaxError: Function statements require a function name
+```
+
+<br/>
+
+**Исправление ошибки 4:**
+
+Ошибка в том, что не экспортируется функция и у функции отсутствует имя.
+
+файл: models/game.js
+Строка: 1
+
+Исправление: Использовать следующий синтаксис для экспорта. Присвоение имени объекту с данными.
+
+```js
+const Game = sequelize.define('Games', attributes);
+exports.Game = Game;
 ```
 
 <br/>
@@ -244,15 +296,18 @@ TypeError: db.sync is not a function
 
 ```
 
+Ошибка в неправильном (возможно устаревшем) вызове функции.
+
+файл: app.js
+Строка: 8
+
+Исправление: удаление функции. Использование синтаксиса следующего вида, при необходимости работы с базой.
+
 <br/>
 
-**Ошибка 6:**
-
-```
-const User = require('sequelize').import('../models/user');
-                                        ^
-
-TypeError: require(...).import is not a function
+```js
+const { Game } = require('../models/Game');
+await Game.sync();
 ```
 
 <br/>
@@ -266,6 +321,19 @@ TypeError: require(...).import is not a function
 **Ошибка 1:**
 
 Не запускалось приложение на 4000 порту.
+
+<br/>
+
+**Исправление ошибки 1:**
+
+Ошибка в том, что при запуске приложения нужный порт не назначался или не стартовал должным образом.
+
+файл: app.js
+Строки: 13-15
+
+<br/>
+
+**Исправление:**
 
 **Было:**
 
@@ -295,7 +363,9 @@ app.listen(APP_PORT, () =>
 
 <br/>
 
-Исправление:
+**Исправление ошибки 2:**
+
+**Исправление:**
 
     $ npm install -g npm-check-updates
     $ ncu -u
@@ -305,85 +375,203 @@ app.listen(APP_PORT, () =>
 
 **Ошибка 3:**
 
-Не было экспорта в файле db.js.
+Отсутствовал экспорта в файле db.js.
 
-```
+<br/>
+
+**Исправление ошибки 3:**
+
+файл: db.js
+Строка: конец файла - строка 17-18
+
+Исправление: Реализовать экспорт.
+
+<br/>
+
+```js
 module.exports = sequelize;
-
 ```
 
 <br/>
 
 **Ошибка 4:**
 
+<br/>
+
+**Исправление ошибки 4:**
+
+Описание:
+
+Пока не удалил из app.js, не проходили запросы.
+
 ```
 app.use(require('body-parser'));
 ```
 
-Пока не удалил из app.js, не проходили запросы.
+файл: app.js
+Строка: 9
+
+Исправление: Удаление строки из приложения.
 
 <br/>
 
 **Ошибка 5:**
 
-passwordHash отличалась в модели и в вызовах.
+<br/>
+
+**Исправление ошибки 4:**
+
+Описание:
+
+Разный регистр в слове passwordHash. При работе, значение переданное программе терялось.
+
+файл: controllers/usercontroller.js  
+Строка: 11
+
+файл: controllers/usercontroller.js  
+Строка: 32
+
+Исправление: Использовать одно название в каждом из перечисленных случаев - passwordHash.
 
 <br/>
 
 **Ошибка 6:**
 
+Описание:
+
 При SIGN IN возвращались лишине данные, в том числе и passwordHash
+
+файл: controllers/usercontroller.js  
+Строка: 36
+
+Исправление: убрать из возвращаемых данных созданного пользователя.
+
+```
+user: user,
+```
+
+Оставить только token.
 
 <br/>
 
 **Ошибка 7:**
 
-В коде повторяется JWT_SECRET_KEY ключ. Вынес в .env.
+Описание:
+
+В коде повторяется строковая переменная со значение 'lets_play_sum_games_man' для JWT токена.
+
+файл: middleware/validate-session.js  
+Строка: 12
+
+файл: controllers/usercontroller.js  
+Строка: 34
+
+Исправление: Вынес строковую переменную в JWT_SECRET_KEY в файл .env.
 
 <br/>
 
 **Ошибка 8:**
 
-Какая-то непонятная ерунда в импортах.
-// const User = require('sequelize').import('../models/user');
+Описание:
+
+В моделях отсутвовали constraints, в том числе PK.
+
+файл: models/game.js  
+Строка:
+
+файл: models/user.js  
+Строка:
+
+Исправление: Добавил constraints на некоторые поля.
 
 <br/>
 
 **Ошибка 9:**
 
-Нет проверок передаваемых параметров в приложение.
+Описание:
+
+Неправильные ответы от сервера. д.б. 404. передается 500. Посторяется в нескольких файлах.
+
+файл: controllers/gamecontroller.js
+Строка: 15
 
 <br/>
 
-**Ошибка 10:**
-
-В моделях отсутвовали constraints, в том числе PK.
+Было:
 
 <br/>
 
-**Ошибка 11:**
-
-Неправильные ответы от сервера. д.б. 404
-
-<br/>
-
-```
+```js
 res.status(500).json({
-message: 'Data not found',
+  message: 'Data not found',
 });
 ```
 
 <br/>
 
-**Ошибка 12:**
-
-havePlayed обрабатывает неправильно. д.б. boolean
+```js
+return res.status(404).json({
+  message: 'Data not found',
+});
+```
 
 <br/>
 
-**Ошибка 13:**
+**Ошибка 10:**
+
+Описание:
 
 Использовались id из обычных цифр. Не является хорошей практикой. Является логической ошибкой, т.к. пользователи могу удидеть закономерности и абузить их.
+
+файл: /model/user.js
+Строки: -
+
+файл: /model/game.js
+Строки: -
+
+Исправления: Использовать.
+
+<br/>
+
+**models/Game.js**
+
+```
+  id: {
+    primaryKey: true,
+    allowNull: false,
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+  },
+```
+
+<br/>
+
+**models/User.js**
+
+```
+  id: {
+    primaryKey: true,
+    allowNull: false,
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+  },
+```
+
+<br/>
+
+**Ошибка 11:**
+
+Передаваемый параметр havePlayed обрабатывает неправильно. д.б. boolean
+
+Не исправлялось.
+
+<br/>
+
+**Ошибка 12:**
+
+Нет проверок передаваемых параметров в приложение.
+
+Не исправлялось.
 
 <br/>
 
