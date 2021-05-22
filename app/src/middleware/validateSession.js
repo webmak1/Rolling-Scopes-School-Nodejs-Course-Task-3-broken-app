@@ -1,41 +1,37 @@
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const { User } = require('../models/User');
+const { StatusCodes, getReasonPhrase } = require('http-status-codes');
 
-module.exports = function (req, res, next) {
-  if (req.method == 'OPTIONS') {
-    next(); // allowing options as a method for request
-  } else {
+module.exports = async (req, res, next) => {
+  try {
     const sessionToken = req.headers.authorization;
 
     if (!sessionToken) {
       return res
-        .status(403)
+        .status(StatusCodes.FORBIDDEN)
         .send({ auth: false, message: 'No token provided.' });
     }
 
-    jwt.verify(
-      sessionToken,
-      process.env.JWT_SECRET_KEY,
-      async (err, decoded) => {
-        if (decoded) {
-          try {
-            // await User.sync({ force: true });
-            await User.sync();
-            const user = await User.findOne({ where: { id: decoded.id } });
+    const decoded = await jwt.verify(sessionToken, process.env.JWT_SECRET_KEY);
 
-            if (!user) {
-              return res.status(401).send({ error: 'not authorized' });
-            }
-            req.body.user = user;
-            next();
-          } catch (error) {
-            return res.status(401).send({ error: 'not authorized' });
-          }
-        } else {
-          return res.status(400).send({ error: 'not authorized' });
-        }
+    if (decoded) {
+      console.log(decoded);
+
+      await User.sync();
+      const user = await User.findOne({ where: { id: decoded.id } });
+
+      if (!user) {
+        return res
+          .status(StatusCodes.UNAUTHORIZED)
+          .send({ error: getReasonPhrase(StatusCodes.UNAUTHORIZED) });
       }
-    );
+      req.body.user = user;
+      next();
+    }
+  } catch (error) {
+    return res
+      .status(StatusCodes.UNAUTHORIZED)
+      .send({ error: getReasonPhrase(StatusCodes.UNAUTHORIZED) });
   }
 };

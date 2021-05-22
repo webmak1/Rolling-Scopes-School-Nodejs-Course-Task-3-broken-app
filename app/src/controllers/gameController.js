@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const { Game } = require('../models/Game');
+const { StatusCodes } = require('http-status-codes');
 
 // GET ALL
 router.get('/all', async (req, res) => {
@@ -11,16 +12,16 @@ router.get('/all', async (req, res) => {
     const allGames = await Game.findAll({ where: { ownerId: userId } });
 
     if (!allGames) {
-      return res.status(404).json({
+      return res.status(StatusCodes.NOT_FOUND).json({
         message: 'Data not found',
       });
     }
-    return res.status(200).json({
+    return res.status(StatusCodes.OK).json({
       games: allGames,
       message: 'Data fetched.',
     });
   } catch (err) {
-    return res.status(500).json({
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       message: err.message,
     });
   }
@@ -40,16 +41,16 @@ router.get('/:id', async (req, res) => {
     });
 
     if (!game) {
-      return res.status(404).json({
+      return res.status(StatusCodes.NOT_FOUND).json({
         message: 'Data not found',
       });
     }
 
-    return res.status(200).json({
+    return res.status(StatusCodes.OK).json({
       game,
     });
   } catch (err) {
-    return res.status(500).json({
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       message: err.message,
     });
   }
@@ -73,11 +74,11 @@ router.post('/create', async (req, res) => {
       havePlayed,
     });
 
-    return res.status(200).json({
+    return res.status(StatusCodes.OK).json({
       message: `Game with title ${createdGame.title} successfully created!`,
     });
   } catch (err) {
-    return res.status(500).json({
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       message: err.message,
     });
   }
@@ -110,11 +111,11 @@ router.put('/update/:id', async (req, res) => {
       }
     );
 
-    return res.status(200).json({
+    return res.status(StatusCodes.OK).json({
       message: `Game with id ${updatedGame} successfully updated!`,
     });
   } catch (err) {
-    return res.status(500).json({
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       message: err.message,
     });
   }
@@ -137,11 +138,11 @@ router.delete('/remove/:id', async (req, res) => {
       },
     });
 
-    return res.status(200).json({
+    return res.status(StatusCodes.OK).json({
       message: `Game with id ${gameId} successfully deleted!`,
     });
   } catch (err) {
-    return res.status(500).json({
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       message: err.message,
     });
   }

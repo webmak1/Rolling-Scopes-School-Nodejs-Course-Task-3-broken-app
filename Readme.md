@@ -74,14 +74,14 @@ $ curl \
 
 ```
 {
-    "message": "Your token for authorization is: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM3NjFmNGMwLWZlMjAtNDA3NC05NjA0LTQ4ZjI4NzEyYmZhYiIsImlhdCI6MTYyMTY5MjQ0NiwiZXhwIjoxNjIxNzc4ODQ2fQ.iRr8XrQHRGlhIVG19ANfMGhT4AJTCrMetUWRRS0_8xc"
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQ2NTlhMjQyLTQ3YTgtNDdhNy05MDNmLTRhNjA4YzZlNmM4MSIsImlhdCI6MTYyMTcxNDcwNiwiZXhwIjoxNjIxODAxMTA2fQ.okOLxGZMhz8H25gLTHXmyatffoTcjFyQSrjjt2AEIbw"
 }
 ```
 
 <br/>
 
 ```
-$ export TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM3NjFmNGMwLWZlMjAtNDA3NC05NjA0LTQ4ZjI4NzEyYmZhYiIsImlhdCI6MTYyMTY5MjQ0NiwiZXhwIjoxNjIxNzc4ODQ2fQ.iRr8XrQHRGlhIVG19ANfMGhT4AJTCrMetUWRRS0_8xc
+$ export TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQ2NTlhMjQyLTQ3YTgtNDdhNy05MDNmLTRhNjA4YzZlNmM4MSIsImlhdCI6MTYyMTcxNDcwNiwiZXhwIjoxNjIxODAxMTA2fQ.okOLxGZMhz8H25gLTHXmyatffoTcjFyQSrjjt2AEIbw
 ```
 
 <br/>
@@ -755,6 +755,22 @@ return res.status(404).json({
 **Ошибка 11:**
 
 ```
+Описание:
+
+Если передать в качестве метода OPTIONS - возможен неавторизованный доступ.
+
+файл: middleware/validate-session.js
+Строки: 5-7
+
+
+Исправления: Удаление такой возможности.
+```
+
+<br/>
+
+**Ошибка 12:**
+
+```
 Нет проверок передаваемых параметров в приложение.
 
 Не исправлялось.
@@ -772,3 +788,4 @@ return res.status(404).json({
 - Изменен вывод данных в консоль при запросах.
 - Заменил автоинкремент id в моделях на uuidv4
 - Заменил названия входных параметров, чтобы они все были camelCase
+- Добавлены коды ответов сервера из пакета http-status-codes
