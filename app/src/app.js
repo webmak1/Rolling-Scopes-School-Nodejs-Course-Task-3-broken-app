@@ -1,15 +1,13 @@
 const express = require('express');
-// const db = require('./db');
-const user = require('./controllers/usercontroller');
-const game = require('./controllers/gamecontroller');
-// const Sequelize = require('sequelize');
+const user = require('./controllers/userController');
+const game = require('./controllers/gameController');
 require('dotenv').config();
 
 const app = express();
 app.use(express.json());
 
 app.use('/api/auth', user);
-app.use(require('./middleware/validate-session'));
+app.use(require('./middleware/validateSession'));
 app.use('/api/game', game);
 
 const APP_PORT = process.env.APP_APP_PORT || 4000;
